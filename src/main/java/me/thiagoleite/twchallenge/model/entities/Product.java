@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
 
     @NotBlank
