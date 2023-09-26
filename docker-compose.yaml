@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.docker/pgdata:/var/lib/postgresql/data
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+
+networks:
+  my-network:
+    external: true
