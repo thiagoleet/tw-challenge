@@ -26,13 +26,11 @@ public class ProductService {
     }
 
     public Product update(Product product, Long id) {
-        Optional<Product> exists = repository.findById(id);
+        Optional<Product> exists = findById(id);
 
         if (exists.isPresent()) {
             product.setId(id);
-            repository.save(product);
-
-            return product;
+            return save(product);
         }
 
         return null;

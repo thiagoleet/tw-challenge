@@ -2,7 +2,7 @@ package me.thiagoleite.twchallenge.controllers;
 
 import jakarta.validation.Valid;
 import me.thiagoleite.twchallenge.model.entities.Order;
-import me.thiagoleite.twchallenge.model.repositories.OrderRepository;
+import me.thiagoleite.twchallenge.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,40 +13,30 @@ import java.util.Optional;
 public class OrderController {
 
     @Autowired
-    private OrderRepository repository;
+    private OrderService service;
 
     @GetMapping
     public Iterable<Order> getAll() {
-        return repository.findAll();
+        return service.findAll();
     }
 
     @GetMapping(path = "/{id}")
-    public Optional<Order> getById(@PathVariable long id) {
-        return repository.findById(id);
+    public Optional<Order> getById(@PathVariable Long id) {
+        return service.findById(id);
     }
 
     @PostMapping
     public @ResponseBody Order create(@RequestBody @Valid Order order) {
-        repository.save(order);
-        return order;
+        return service.save(order);
     }
 
     @PutMapping(path = "/{id}")
-    public @ResponseBody Order update(@PathVariable long id, @RequestBody @Valid Order order) {
-        Optional<Order> exists = repository.findById(id);
-
-        if(exists.isPresent()) {
-            order.setId(id);
-            repository.save(order);
-
-            return  order;
-        }
-
-        return  null;
+    public @ResponseBody Order update(@PathVariable Long id, @RequestBody @Valid Order order) {
+        return service.update(order, id);
     }
 
     @DeleteMapping(path = "/{id}")
-    public void remove(@PathVariable long id) {
-        repository.deleteById(id);
+    public void remove(@PathVariable Long id) {
+        service.deleteById(id);
     }
 }

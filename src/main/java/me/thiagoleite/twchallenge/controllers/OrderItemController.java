@@ -2,7 +2,7 @@ package me.thiagoleite.twchallenge.controllers;
 
 import jakarta.validation.Valid;
 import me.thiagoleite.twchallenge.model.entities.OrderItem;
-import me.thiagoleite.twchallenge.model.repositories.OrderItemRepository;
+import me.thiagoleite.twchallenge.services.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,40 +13,30 @@ import java.util.Optional;
 public class OrderItemController {
 
     @Autowired
-    private OrderItemRepository repository;
+    private OrderItemService service;
 
     @GetMapping
     public Iterable<OrderItem> getAll() {
-        return repository.findAll();
+        return service.findAll();
     }
 
     @GetMapping(path = "/{id}")
-    public Optional<OrderItem> getById(@PathVariable long id) {
-        return repository.findById(id);
+    public Optional<OrderItem> getById(@PathVariable Long id) {
+        return service.findById(id);
     }
 
     @PostMapping
     public @ResponseBody OrderItem create(@RequestBody @Valid OrderItem orderItem) {
-        repository.save(orderItem);
-        return orderItem;
+        return service.save(orderItem);
     }
 
     @PutMapping(path = "/{id}")
-    public @ResponseBody OrderItem update(@PathVariable long id, @RequestBody @Valid OrderItem orderItem) {
-        Optional<OrderItem> exists = repository.findById(id);
-
-        if(exists.isPresent()) {
-            orderItem.setId(id);
-            repository.save(orderItem);
-
-            return  orderItem;
-        }
-
-        return  null;
+    public @ResponseBody OrderItem update(@PathVariable Long id, @RequestBody @Valid OrderItem orderItem) {
+        return service.update(orderItem, id);
     }
 
     @DeleteMapping(path = "/{id}")
-    public void remove(@PathVariable long id) {
-        repository.deleteById(id);
+    public void remove(@PathVariable Long id) {
+        service.deleteById(id);
     }
 }
