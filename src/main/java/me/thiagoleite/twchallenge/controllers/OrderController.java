@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import me.thiagoleite.twchallenge.model.entities.Order;
 import me.thiagoleite.twchallenge.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class OrderController implements ApiController<Order> {
     }
 
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public @ResponseBody Order create(@RequestBody @Valid Order data) {
         return service.save(data);
@@ -36,6 +38,7 @@ public class OrderController implements ApiController<Order> {
         return service.update(id, data);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/{id}")
     public void remove(@PathVariable Long id) {
         service.deleteById(id);
