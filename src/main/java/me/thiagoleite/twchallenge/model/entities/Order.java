@@ -2,6 +2,7 @@ package me.thiagoleite.twchallenge.model.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
     private List<OrderItem> items;
 
     private Date date;
@@ -49,5 +50,15 @@ public class Order {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public void add(OrderItem item) {
+        if(item != null) {
+            if(items == null) {
+                items = new ArrayList<>();
+            }
+
+            item.setOrder(this);
+        }
     }
 }
