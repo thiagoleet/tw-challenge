@@ -5,6 +5,7 @@ import me.thiagoleite.twchallenge.model.entities.Order;
 import me.thiagoleite.twchallenge.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -22,25 +23,35 @@ public class OrderController implements ApiController<Order> {
     }
 
     @GetMapping(path = "/{id}")
-    public Optional<Order> getById(@PathVariable Long id) {
-        return service.findById(id);
+    public ResponseEntity<Order> getById(@PathVariable Long id) {
+        Optional<Order> order = service.findById(id);
+        return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public @ResponseBody Order create(@RequestBody @Valid Order data) {
-        return service.save(data);
+    public @ResponseBody ResponseEntity<Order> create(@RequestBody @Valid Order data) {
+        Order createdOrder = service.save(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
 
     @PutMapping(path = "/{id}")
-    public @ResponseBody Order update(@PathVariable Long id, @RequestBody @Valid Order data) {
-        return service.update(id, data);
+    public @ResponseBody ResponseEntity<Order> update(@PathVariable Long id, @RequestBody @Valid Order data) {
+        try {
+            Order order = service.update(id, data);
+            return ResponseEntity.ok(order);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/{id}")
-    public void remove(@PathVariable Long id) {
-        service.deleteById(id);
+    public ResponseEntity<Void> remove(@PathVariable Long id) {
+        try {
+            service.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

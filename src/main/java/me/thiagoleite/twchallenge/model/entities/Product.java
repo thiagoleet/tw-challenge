@@ -20,6 +20,7 @@ public class Product {
     @Min(0)
     private double price;
 
+
     public Product() {
     }
 
@@ -51,4 +52,5 @@ public class Product {
     public void setPrice(double price) {
         this.price = price;
     }
+
 }
