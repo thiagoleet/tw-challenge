@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/order-items")
-public class OrderItemController {
+public class OrderItemController implements ApiController<OrderItem> {
 
     @Autowired
     private OrderItemService service;
@@ -31,8 +31,8 @@ public class OrderItemController {
     }
 
     @PutMapping(path = "/{id}")
-    public @ResponseBody OrderItem update(@PathVariable Long id, @RequestBody @Valid OrderItem orderItem) {
-        return service.update(orderItem, id);
+    public @ResponseBody OrderItem update(@PathVariable Long id, @RequestBody @Valid OrderItem data) {
+        return service.update(id, data);
     }
 
     @DeleteMapping(path = "/{id}")

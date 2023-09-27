@@ -1,6 +1,7 @@
 package me.thiagoleite.twchallenge.services;
 
 import me.thiagoleite.twchallenge.model.entities.Order;
+import me.thiagoleite.twchallenge.model.entities.Product;
 import me.thiagoleite.twchallenge.model.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class OrderService {
+public class OrderService implements ApiService<Order> {
 
     @Autowired
     private OrderRepository repository;
@@ -21,19 +22,20 @@ public class OrderService {
         return repository.findById(id);
     }
 
-    public Order save(Order order) {
-        return repository.save(order);
+    public Order save(Order data) {
+        return repository.save(data);
     }
 
-    public Order update(Order order, Long id) {
-        Optional<Order> exists = findById(id);
-
-        if (exists.isPresent()) {
-            order.setId(id);
-            return save(order);
+    @Override
+    public Order update(Long id, Order updatedData) {
+        Optional<Order> existingOrder = repository.findById(id);
+        if (existingOrder.isPresent()) {
+            updatedData.setId(id);
+            return repository.save(updatedData);
+        } else {
+            throw new IllegalArgumentException("Order not found with id: " + id);
         }
 
-        return null;
     }
 
     public void deleteById(Long id) {

@@ -1,6 +1,8 @@
 package me.thiagoleite.twchallenge.model.entities;
 
 import jakarta.persistence.*;
+
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -11,13 +13,17 @@ public class Order {
     private Long id;
 
     @OneToMany(mappedBy = "order")
-    private List<OrderItem> itens;
+    private List<OrderItem> items;
+
+    private Date date;
 
     public Order() {
+        this.date = new Date();
     }
 
-    public Order(List<OrderItem> itens) {
-        this.itens = itens;
+    public Order(List<OrderItem> items) {
+        this.items = items;
+        this.date = new Date();
     }
 
 
@@ -29,11 +35,19 @@ public class Order {
         this.id = id;
     }
 
-    public List<OrderItem> getItens() {
-        return itens;
+    public List<OrderItem> getItems() {
+        return items;
     }
 
-    public void setItens(List<OrderItem> itens) {
-        this.itens = itens;
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

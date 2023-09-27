@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/products")
-public class ProductController {
+public class ProductController implements ApiController<Product> {
 
     @Autowired
     private ProductService service;
@@ -28,18 +28,18 @@ public class ProductController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public @ResponseBody Product create(@RequestBody @Valid Product product) {
-        return service.save(product);
+    public @ResponseBody Product create(@RequestBody @Valid Product data) {
+        return service.save(data);
     }
 
     @PutMapping(path = "/{id}")
-    public @ResponseBody Product update(@PathVariable long id, @RequestBody @Valid Product product) {
-        return service.update(product, id);
+    public @ResponseBody Product update(@PathVariable Long id, @RequestBody @Valid Product data) {
+        return service.update(id, data);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/{id}")
-    public void remove(@PathVariable long id) {
+    public void remove(@PathVariable Long id) {
         service.deleteById(id);
     }
 }

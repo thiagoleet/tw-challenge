@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/orders")
-public class OrderController {
+public class OrderController implements ApiController<Order> {
 
     @Autowired
     private OrderService service;
@@ -25,14 +25,15 @@ public class OrderController {
         return service.findById(id);
     }
 
+
     @PostMapping
-    public @ResponseBody Order create(@RequestBody @Valid Order order) {
-        return service.save(order);
+    public @ResponseBody Order create(@RequestBody @Valid Order data) {
+        return service.save(data);
     }
 
     @PutMapping(path = "/{id}")
-    public @ResponseBody Order update(@PathVariable Long id, @RequestBody @Valid Order order) {
-        return service.update(order, id);
+    public @ResponseBody Order update(@PathVariable Long id, @RequestBody @Valid Order data) {
+        return service.update(id, data);
     }
 
     @DeleteMapping(path = "/{id}")

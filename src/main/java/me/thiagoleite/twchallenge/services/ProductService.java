@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ProductService {
+public class ProductService implements ApiService<Product> {
 
     @Autowired
     private ProductRepository repository;
@@ -21,22 +21,22 @@ public class ProductService {
         return repository.findById(id);
     }
 
-    public Product save(Product product) {
-        return repository.save(product);
-    }
-
-    public Product update(Product product, Long id) {
-        Optional<Product> exists = findById(id);
-
-        if (exists.isPresent()) {
-            product.setId(id);
-            return save(product);
-        }
-
-        return null;
+    public Product save(Product data) {
+        return repository.save(data);
     }
 
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public Product update(Long id, Product updatedData) {
+        Optional<Product> existingProduct = repository.findById(id);
+        if (existingProduct.isPresent()) {
+            updatedData.setId(id);
+            return repository.save(updatedData);
+        } else {
+            throw new IllegalArgumentException("Product not found with id: " + id);
+        }
     }
 }
