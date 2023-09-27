@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
   db:
@@ -14,6 +14,28 @@ services:
       - ./.docker/pgdata:/var/lib/postgresql/data
     extra_hosts:
       - "host.docker.internal:172.17.0.1"
+
+  app:
+    depends_on:
+      - db
+    container_name: twchallenge
+    build: ./tw-challenge
+    restart: always
+    environment:
+      - spring.jpa.generate-ddl=true
+      - spring.jpa.hibernate.ddl-auto=update
+      - spring.datasource.url=jdbc:postgresql://host.docker.internal:5432/twchallenge
+      - spring.datasource.username=postgres
+      - spring.datasource.password=root
+
+    ports:
+      - "8000:8080"
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+    stdin_open: true
+    tty: true
+
+
 
 networks:
   my-network:
