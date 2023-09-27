@@ -14,18 +14,19 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
 
     @Mock
-    private ProductRepository productRepository;
+    private ProductRepository repository;
 
     @InjectMocks
-    private ProductService productService;
+    private ProductService service;
 
 
     @Test
@@ -36,13 +37,13 @@ public class ProductServiceTest {
         product.setPrice(999);
 
 
-        when(productRepository.findAll())
+        when(repository.findAll())
                 .thenReturn(List.of(product));
 
-        Iterable<Product> products = productService.findAll();
+        Iterable<Product> products = service.findAll();
 
         assertEquals(List.of(product), products);
-        verify(productRepository).findAll();
+        verify(repository).findAll();
     }
 
     @Test
@@ -53,40 +54,58 @@ public class ProductServiceTest {
         product.setPrice(999);
 
 
-        when(productRepository.findById(1L))
+        when(repository.findById(1L))
                 .thenReturn(Optional.of(product));
 
-        Product expected = productService.findById(1L).get();
+        Product expected = service.findById(1L).get();
 
         assertEquals(product, expected);
-        verify(productRepository).findById(1L);
+        verify(repository).findById(1L);
     }
 
     @Test
-    public void create_should_return_item() {
-        Product product = new Product();
-        product.setId(1L);
-        product.setName("iPad");
-        product.setPrice(999);
+    public void create_should_return_item() throws Exception {
+        Product newProduct = new Product();
+        newProduct.setId(1L);
+        newProduct.setName("iPad");
+        newProduct.setPrice(999);
 
 
-        when(productRepository.save(new Product("iPad", 999)))
-                .thenReturn(product);
+        when(repository.save(any(Product.class)))
+                .thenReturn(newProduct);
 
-        Product expected = productService.create(new Product("iPad", 999));
+        Product expected = service.create(new Product("iPad", 999));
 
-        assertEquals(product, expected);
-        verify(productRepository).save(new Product("iPad", 999));
+        assertEquals(newProduct, expected);
+        verify(repository).save(any(Product.class));
     }
 
     @Test
-    public  void deleteById_should_remove_item() {
-        // TODO:
+    public void deleteById_should_remove_item() {
+        service.deleteById(1L);
+
+        verify(repository, times(1))
+                .deleteById(1L);
+
     }
 
     @Test
-    public  void update_should_change_item() {
-        // TODO:
+    public void update_should_change_item() {
+        Product updatedProduct = new Product();
+        updatedProduct.setId(1L);
+        updatedProduct.setName("iPhone");
+        updatedProduct.setPrice(999);
+
+        when(repository.save(any(Product.class)))
+                .thenReturn(updatedProduct);
+
+        when(repository.findById(1L))
+                .thenReturn(Optional.of(updatedProduct));
+
+        Product expected = service.update(1L, new Product("iPad", 999));
+
+        assertEquals(updatedProduct, expected);
+        verify(repository).save(any(Product.class));
     }
 
 
