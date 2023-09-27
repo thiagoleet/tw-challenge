@@ -2,6 +2,7 @@ package me.thiagoleite.twchallenge.services;
 
 import me.thiagoleite.twchallenge.model.entities.Order;
 import me.thiagoleite.twchallenge.model.entities.Product;
+import me.thiagoleite.twchallenge.model.repositories.OrderItemRepository;
 import me.thiagoleite.twchallenge.model.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,9 @@ public class OrderService implements ApiService<Order> {
 
     @Autowired
     private OrderRepository repository;
+
+    @Autowired
+    private OrderItemRepository itemRepository;
 
     public Iterable<Order> findAll() {
         return repository.findAll();
@@ -26,7 +30,6 @@ public class OrderService implements ApiService<Order> {
         return repository.save(data);
     }
 
-    @Override
     public Order update(Long id, Order updatedData) {
         Optional<Order> existingOrder = repository.findById(id);
         if (existingOrder.isPresent()) {

@@ -14,7 +14,7 @@ public class Order {
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
-    private List<OrderItem> items;
+    private List<OrderItem> items = new ArrayList<>();
 
     private Date date;
 

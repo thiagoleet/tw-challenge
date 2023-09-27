@@ -15,9 +15,8 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-//    @OneToOne
-//    @JoinColumn(name = "product_id")
-//    private Product product;
+    @ManyToOne()
+    private Product product;
 
     @Column(nullable = false)
     @Min(1)
@@ -28,7 +27,7 @@ public class OrderItem {
 
     public OrderItem(Order order, Product product, int quantity) {
         this.order = order;
-//        this.product = product;
+        this.product = product;
         this.quantity = quantity;
     }
 
@@ -48,13 +47,13 @@ public class OrderItem {
         this.order = order;
     }
 
-//    public Product getProduct() {
-//        return product;
-//    }
-//
-//    public void setProduct(Product product) {
-//        this.product = product;
-//    }
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public int getQuantity() {
         return quantity;
