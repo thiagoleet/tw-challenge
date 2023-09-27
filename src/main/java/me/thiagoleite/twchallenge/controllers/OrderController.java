@@ -31,7 +31,7 @@ public class OrderController implements ApiController<Order> {
 
     @PostMapping
     public @ResponseBody ResponseEntity<Order> create(@RequestBody @Valid Order data) {
-        Order createdOrder = service.save(data);
+        Order createdOrder = service.create(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
 

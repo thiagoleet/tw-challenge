@@ -22,7 +22,7 @@ public class OrderItemService implements ApiService<OrderItem> {
         return repository.findById(id);
     }
 
-    public OrderItem save(OrderItem data) {
+    public OrderItem create(OrderItem data) {
         return repository.save(data);
     }
 

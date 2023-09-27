@@ -21,7 +21,7 @@ public class ProductService implements ApiService<Product> {
         return repository.findById(id);
     }
 
-    public Product save(Product data) {
+    public Product create(Product data) {
         return repository.save(data);
     }
 

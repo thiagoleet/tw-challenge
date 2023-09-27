@@ -1,7 +1,6 @@
 package me.thiagoleite.twchallenge.controllers;
 
 import jakarta.validation.Valid;
-import me.thiagoleite.twchallenge.model.entities.Order;
 import me.thiagoleite.twchallenge.model.entities.Product;
 import me.thiagoleite.twchallenge.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,7 @@ public class ProductController implements ApiController<Product> {
 
     @PostMapping
     public @ResponseBody ResponseEntity<Product> create(@RequestBody @Valid Product data) {
-        Product product = service.save(data);
+        Product product = service.create(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 

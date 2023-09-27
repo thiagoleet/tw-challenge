@@ -4,9 +4,11 @@ import me.thiagoleite.twchallenge.model.entities.Order;
 import me.thiagoleite.twchallenge.model.entities.Product;
 import me.thiagoleite.twchallenge.model.repositories.OrderItemRepository;
 import me.thiagoleite.twchallenge.model.repositories.OrderRepository;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -15,8 +17,6 @@ public class OrderService implements ApiService<Order> {
     @Autowired
     private OrderRepository repository;
 
-    @Autowired
-    private OrderItemRepository itemRepository;
 
     public Iterable<Order> findAll() {
         return repository.findAll();
@@ -26,8 +26,11 @@ public class OrderService implements ApiService<Order> {
         return repository.findById(id);
     }
 
-    public Order save(Order data) {
-        return repository.save(data);
+    public Order create(Order data) {
+        Order order = new Order();
+        data.getItems().stream().forEach(order::add);
+
+        return repository.save(order);
     }
 
     public Order update(Long id, Order updatedData) {

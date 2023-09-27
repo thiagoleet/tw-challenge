@@ -13,20 +13,24 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
+    @OneToMany(
+            cascade = CascadeType.PERSIST,
+            fetch = FetchType.EAGER,
+            orphanRemoval = true,
+            mappedBy = "order"
+    )
     private List<OrderItem> items = new ArrayList<>();
 
     private Date date;
 
     public Order() {
-        this.date = new Date();
+        date = new Date();
     }
 
     public Order(List<OrderItem> items) {
         this.items = items;
         this.date = new Date();
     }
-
 
     public Long getId() {
         return id;
@@ -53,12 +57,7 @@ public class Order {
     }
 
     public void add(OrderItem item) {
-        if(item != null) {
-            if(items == null) {
-                items = new ArrayList<>();
-            }
-
-            item.setOrder(this);
-        }
+        items.add(item);
+        item.setOrder(this);
     }
 }

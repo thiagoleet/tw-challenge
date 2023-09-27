@@ -7,7 +7,7 @@ public interface ApiService<T> {
 
     Optional<T> findById(Long id);
 
-    T save(T data);
+    T create(T data);
 
     T update(Long id, T updatedData);
 
