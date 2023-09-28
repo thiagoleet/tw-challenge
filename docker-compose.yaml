@@ -10,8 +10,10 @@ services:
       POSTGRES_PASSWORD: root
     ports:
       - "5432:5432"
+    expose:
+      - 5432
     volumes:
-      - ./.docker/pgdata:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     extra_hosts:
       - "host.docker.internal:172.17.0.1"
 
@@ -35,7 +37,10 @@ services:
     stdin_open: true
     tty: true
 
+ 
 
+volumes:
+  postgres-data:
 
 networks:
   my-network:
